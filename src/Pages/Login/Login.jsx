@@ -85,8 +85,9 @@ const Login = () => {
                                 </label>
                                 <input type="text" onBlur={handleValidateCaptcha} name="captcha" placeholder="Type the text avobe" className="input input-bordered" />
                             </div>
+                            {/*** TODO: Make btn disabled for Chapcha */}
                             <div className="form-control mt-6">
-                                <input disabled={disabled} className="btn btn-primary" type="submit" value="login" />
+                                <input disabled={false} className="btn btn-primary" type="submit" value="login" />
                             </div>
                         </form>
                         <p className='mx-auto'><small>New to Here? <Link to='/signup'>Create an Account</Link></small></p>
