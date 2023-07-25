@@ -4,34 +4,49 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider";
 import Swal from "sweetalert2";
+import SocialLogin from "../Shared/SocialLogin/SocialLogin";
 
 
 const SignUp = () => {
     const navigate = useNavigate();
 
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
-    const {createUser , updateUserProfile} = useContext(AuthContext);
+    const { createUser, updateUserProfile } = useContext(AuthContext);
 
     const onSubmit = data => {
-        createUser(data.email , data.password)
-        .then(result=>{
-            const loggedUser =result.user;
-            console.log(loggedUser);
-            updateUserProfile(data.name , data.PhotoURL)
-            .then (()=> {
-                console.log("Photo URL Submited");
-                reset();
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Congratulations! User Created Successfully!',
-                    showConfirmButton: false,
-                    timer: 1500
-                  });
-                  navigate('/');
+        createUser(data.email, data.password)
+            .then(result => {
+                const loggedUser = result.user;
+                console.log(loggedUser);
+                updateUserProfile(data.name, data.PhotoURL)
+                    .then(() => {
+                        const savedUser = {name: data.name, email: data.email}
+                        console.log("Photo URL Submited");
+                        fetch('http://localhost:5000/users',{
+                            method: 'POST',
+                            headers:{
+                                'content-type' : 'application/json'
+                            },
+                            body: JSON.stringify(savedUser)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.insertedId) {
+                                    reset();
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: 'Congratulations! User Created Successfully!',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    navigate('/');
+                                }
+                            })
+
+                    })
+                    .then(error => console.log(error))
             })
-            .then(error=> console.log(error))
-        })
     }
 
     console.log(watch("example"));
@@ -60,7 +75,7 @@ const SignUp = () => {
                                 <label className="label">
                                     <span className="label-text">Photo URL</span>
                                 </label>
-                                <input type="text" {...register("PhotoURL")}  placeholder="Photo URL" className="input input-bordered" />
+                                <input type="text" {...register("PhotoURL")} placeholder="Photo URL" className="input input-bordered" />
                             </div>
                             <div className="form-control">
                                 <label className="label">
@@ -91,6 +106,7 @@ const SignUp = () => {
                             </div>
                         </form>
                         <p className='mx-auto'><small>Aulredy Have an Account? <Link to='/login'>Sign Up</Link></small></p>
+                        <SocialLogin></SocialLogin>
                     </div>
                 </div>
             </div>

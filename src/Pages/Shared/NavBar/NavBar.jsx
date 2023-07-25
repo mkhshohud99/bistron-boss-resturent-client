@@ -20,7 +20,7 @@ const NavBar = () => {
         <li><Link to="/order/salad">Order Food</Link></li>
         <li><Link to="/secret">Secret Page</Link></li>
         <li>
-            <Link to="/">
+            <Link to="/dashboard/mycart">
                 <button className="btn gap-2">
                 <FaShoppingCart></FaShoppingCart>
                     <div className="badge badge-secondary">+{cart?.length || 0}</div>
@@ -59,7 +59,7 @@ const NavBar = () => {
                 <div className="navbar-end">
                     <a className="btn">{user?.displayName || "Gast User"}</a>
                     <div className="avatar">
-                        <div className="w-24 rounded-full">
+                        <div className="w-16 rounded-full">
                             <img src={user?.photoURL} />
                         </div>
                     </div>
